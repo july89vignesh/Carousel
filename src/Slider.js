@@ -5,23 +5,27 @@ function Slider() {
   const sliderArr = [
     {
       id: "1",
-      imagePath: "path-to-image",
+      imagePath:
+        "http://hdwpro.com/wp-content/uploads/2018/07/Awesome-Lake-Image.jpeg",
       show: true
     },
     {
       id: "2",
-      imagePath: "path-to-image",
-      show: false
+      imagePath:
+        "http://hdwpro.com/wp-content/uploads/2017/01/3D-Cool-Image.jpg",
+      show: true
     },
     {
       id: "3",
-      imagePath: "path-to-image",
-      show: false
+      imagePath:
+        "http://hdwpro.com/wp-content/uploads/2017/09/Widescreen-Arizona-Wallpaper.jpg",
+      show: true
     },
     {
       id: "4",
-      imagePath: "path-to-image",
-      show: false
+      imagePath:
+        "http://hdwpro.com/wp-content/uploads/2017/05/Ocean-HD-Wallpaper.jpg",
+      show: true
     }
   ];
   const [x, setX] = useState(0);
@@ -31,9 +35,14 @@ function Slider() {
   const goRight = () => {
     x === -100 * (sliderArr.length - 1) ? setX(0) : setX(x - 100);
   };
-  setInterval(() => {
-    console.log("Interval triggered");
-  }, 3000);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goRight();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [x]);
+
   return (
     <div className="slider">
       {sliderArr.map((item, index) => {
@@ -48,10 +57,10 @@ function Slider() {
         );
       })}
       <button id="goLeft" onClick={goLeft}>
-        <i className="fas fa-chevron-left" />
+        <i className="fas fa-chevron-left fa-2x" />
       </button>
       <button id="goRight" onClick={goRight}>
-        <i className="fas fa-chevron-right" />
+        <i className="fas fa-chevron-right fa-2x" />
       </button>
     </div>
   );
