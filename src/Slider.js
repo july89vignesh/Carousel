@@ -1,61 +1,76 @@
 import React, { useState, useEffect } from "react";
 import ImgComp from "./ImgComp";
+import { useTransition, animated } from "react-spring";
 
 function Slider() {
-  const sliderArr = [
+  const [items] = useState([
     {
-      id: "1",
+      id: 0,
       imagePath:
         "http://hdwpro.com/wp-content/uploads/2018/07/Awesome-Lake-Image.jpeg",
       show: true
     },
     {
-      id: "2",
+      id: 1,
       imagePath:
         "http://hdwpro.com/wp-content/uploads/2017/01/3D-Cool-Image.jpg",
       show: true
     },
     {
-      id: "3",
+      id: 2,
       imagePath:
         "http://hdwpro.com/wp-content/uploads/2017/09/Widescreen-Arizona-Wallpaper.jpg",
       show: true
     },
     {
-      id: "4",
+      id: 3,
       imagePath:
         "http://hdwpro.com/wp-content/uploads/2017/05/Ocean-HD-Wallpaper.jpg",
       show: true
     }
-  ];
-  const [x, setX] = useState(0);
+  ]);
+  const [index, setIndex] = useState(0);
   const goLeft = () => {
-    x === 0 ? setX(-100 * (sliderArr.length - 1)) : setX(x + 100);
+    index === 0
+      ? setIndex(state => items.length - 1)
+      : setIndex(state => (state - 1) % items.length);
   };
   const goRight = () => {
-    x === -100 * (sliderArr.length - 1) ? setX(0) : setX(x - 100);
+    setIndex(state => (state + 1) % items.length);
   };
+
+  const fadingTextPropsTransition = useTransition(
+    items[index],
+    item => item.id,
+    {
+      from: { opacity: 0 },
+      enter: { opacity: 1 },
+      leave: { opacity: 0 },
+      config: { tension: 220, friction: 120 }
+    }
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      goRight();
+      setIndex(state => (state + 1) % items.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [x]);
+  }, []);
 
   return (
     <div className="slider">
-      {sliderArr.map((item, index) => {
-        return (
-          <div
-            key={index}
-            className="slide"
-            style={{ transform: `translateX(${x}%)` }}
-          >
-            <ImgComp src={item.imagePath} />
-          </div>
-        );
-      })}
+      {fadingTextPropsTransition.map(({ item, props, key }) => (
+        <animated.div
+          key={key}
+          className="slide"
+          style={{
+            ...props,
+            position: "absolute"
+          }}
+        >
+          <ImgComp src={item.imagePath} />
+        </animated.div>
+      ))}
       <button id="goLeft" onClick={goLeft}>
         <i className="fas fa-chevron-left fa-2x" />
       </button>
