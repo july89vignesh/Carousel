@@ -24,6 +24,10 @@
   overflow: hidden;
 }
 
+.hidden {
+  display: none;
+}
+
 #goLeft {
   position: absolute;
   left: 0;

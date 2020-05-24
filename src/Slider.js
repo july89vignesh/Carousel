@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ImgComp from "./ImgComp";
 import { useTransition, animated } from "react-spring";
 
-function Slider() {
+const Slider = props => {
   const [items] = useState([
     {
       id: 0,
@@ -43,8 +43,8 @@ function Slider() {
     items[index],
     item => item.id,
     {
-      from: { opacity: 0 },
-      enter: { opacity: 1 },
+      from: { opacity: props.anim === "fadein" ? 0 : 1 },
+      enter: { opacity: props.anim === "fadein" ? 1 : 0 },
       leave: { opacity: 0 },
       config: { tension: 220, friction: 120 }
     }
@@ -71,14 +71,22 @@ function Slider() {
           <ImgComp src={item.imagePath} />
         </animated.div>
       ))}
-      <button id="goLeft" onClick={goLeft}>
+      <button
+        id="goLeft"
+        className={items.length < 2 ? "hidden" : ""}
+        onClick={goLeft}
+      >
         <i className="fas fa-chevron-left fa-2x" />
       </button>
-      <button id="goRight" onClick={goRight}>
+      <button
+        id="goRight"
+        className={items.length < 2 ? "hidden" : ""}
+        onClick={goRight}
+      >
         <i className="fas fa-chevron-right fa-2x" />
       </button>
     </div>
   );
-}
+};
 
 export default Slider;
